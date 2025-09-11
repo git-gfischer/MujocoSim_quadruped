@@ -33,7 +33,6 @@
 
 
     <worldbody>
-        <light directional="true" diffuse=".3 .3 .3" pos="0 0 10" dir="0 0 -10"/>
 
         <body name="trunk" pos="0 0 0.4">
             <inertial pos="0.00846406 0.00404455 -0.000762916" quat="-3.12625e-05 0.708321 0.00247254 0.705886"
