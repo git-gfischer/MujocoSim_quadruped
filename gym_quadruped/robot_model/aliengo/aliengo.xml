@@ -33,7 +33,6 @@
 
 
     <worldbody>
-        <light directional="true" diffuse=".3 .3 .3" pos="0 0 10" dir="0 0 -10"/>
 
         <body name="trunk" pos="0 0 0.4">
             <inertial pos="0.00846406 0.00404455 -0.000762916" quat="-3.12625e-05 0.708321 0.00247254 0.705886"
@@ -219,41 +218,10 @@
     </actuator>
 
     <sensor>
-
-        <jointpos name="FL_hip_pos"     joint="FL_hip_joint"/>
-        <jointpos name="FL_thigh_pos"   joint="FL_thigh_joint"/>
-        <jointpos name="FL_calf_pos"    joint="FL_calf_joint"/>
-        <jointpos name="FR_hip_pos"     joint="FR_hip_joint"/>
-        <jointpos name="FR_thigh_pos"   joint="FR_thigh_joint"/>
-        <jointpos name="FR_calf_pos"    joint="FR_calf_joint"/>
-        <jointpos name="RL_hip_pos"     joint="RL_hip_joint"/>
-        <jointpos name="RL_thigh_pos"   joint="RL_thigh_joint"/>
-        <jointpos name="RL_calf_pos"    joint="RL_calf_joint"/>
-        <jointpos name="RR_hip_pos"     joint="RR_hip_joint"/>
-        <jointpos name="RR_thigh_pos"   joint="RR_thigh_joint"/>
-        <jointpos name="RR_calf_pos"    joint="RR_calf_joint" />
-
-        <jointvel name="FL_hip_vel"     joint="FL_hip_joint"/>
-        <jointvel name="FL_thigh_vel"   joint="FL_thigh_joint"/>
-        <jointvel name="FL_calf_vel"    joint="FL_calf_joint"/>
-        <jointvel name="FR_hip_vel"     joint="FR_hip_joint"/>
-        <jointvel name="FR_thigh_vel"   joint="FR_thigh_joint"/>
-        <jointvel name="FR_calf_vel"    joint="FR_calf_joint"/>
-        <jointvel name="RL_hip_vel"     joint="RL_hip_joint"/>
-        <jointvel name="RL_thigh_vel"   joint="RL_thigh_joint"/>
-        <jointvel name="RL_calf_vel"    joint="RL_calf_joint"/>
-        <jointvel name="RR_hip_vel"     joint="RR_hip_joint"/>
-        <jointvel name="RR_thigh_vel"   joint="RR_thigh_joint"/>
-        <jointvel name="RR_calf_vel"    joint="RR_calf_joint" />
-
-        <accelerometer name="Body_Acc" site="imu"/>
-
-        <gyro name="Body_Gyro" site="imu"/>
-
-        <framepos name="Body_Pos" objtype="site" objname="imu"/>
-
-        <framequat name="Body_Quat" objtype="site" objname="imu"/>
-
+        <accelerometer name="imu_acc" site="imu"/>
+        <gyro name="imu_gyro" site="imu"/>
+        <framepos name="imu_pos" objtype="site" objname="imu"/>
+        <framequat name="imu_quat" objtype="site" objname="imu"/>
     </sensor>
 
 

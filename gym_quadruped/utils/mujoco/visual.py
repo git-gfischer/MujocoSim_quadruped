@@ -169,6 +169,63 @@ def render_line(viewer: Handle, initial_point, target_point, width, color, geom_
     return geom_id
 
 
+def render_frame(
+    viewer: Handle,
+    pos: np.ndarray,
+    quat_wxyz: np.ndarray,
+    scale: float,
+    alpha: float = 1.0,
+    geom_ids: tuple[int, int, int] = (-1, -1, -1),
+) -> tuple[int, int, int]:
+    """Function to render a coordinate frame in the Mujoco viewer.
+
+    Args:
+        viewer (Handle): The Mujoco viewer.
+        pos (np.ndarray): The position of the frame origin (3D).
+        quat_wxyz (np.ndarray): The orientation quaternion in wxyz format (4D).
+        scale (float): The scale/length of the frame axes.
+        alpha (float, optional): The transparency of the frame axes. Defaults to 1.0.
+        geom_ids (tuple[int, int, int], optional): The ids of the geometries for x, y, z axes. Defaults to (-1, -1, -1).
+
+    Returns:
+        tuple[int, int, int]: The ids of the geometries for x, y, z axes.
+    """
+    if viewer is None:
+        return (-1, -1, -1)
+    assert len(geom_ids) == 3, f'Expected 3 geom ids. One per frame axis, got {len(geom_ids)}'
+
+    # Convert quaternion (wxyz) to rotation matrix
+    quat_xyzw = np.array([quat_wxyz[1], quat_wxyz[2], quat_wxyz[3], quat_wxyz[0]])  # Convert wxyz to xyzw
+    rotation_matrix = Rotation.from_quat(quat_xyzw).as_matrix()
+
+    # Define frame axes in local coordinates
+    x_axis = rotation_matrix[:, 1] * scale  # X-axis (red)
+    y_axis = rotation_matrix[:, 0] * scale  # Y-axis (green)
+    z_axis = rotation_matrix[:, 2] * scale  # Z-axis (blue)
+
+    # Define colors for each axis
+    assert 0 <= alpha <= 1.0, 'Alpha must be in the range [0, 1]'
+    x_color = np.array([1.0, 0.0, 0.0, alpha])  # Red
+    y_color = np.array([0.0, 1.0, 0.0, alpha])  # Green
+    z_color = np.array([0.0, 0.0, 1.0, alpha])  # Blue
+
+    # Calculate line width based on scale
+    line_width = scale * 0.02
+
+    # Render each axis as a line from origin to axis endpoint
+    x_geom_id = render_line(
+        viewer, initial_point=pos, target_point=pos + x_axis, width=line_width, color=x_color, geom_id=geom_ids[0]
+    )
+    y_geom_id = render_line(
+        viewer, initial_point=pos, target_point=pos + y_axis, width=line_width, color=y_color, geom_id=geom_ids[1]
+    )
+    z_geom_id = render_line(
+        viewer, initial_point=pos, target_point=pos + z_axis, width=line_width, color=z_color, geom_id=geom_ids[2]
+    )
+
+    return (x_geom_id, y_geom_id, z_geom_id)
+
+
 def change_robot_appearance(mjModel: mujoco.MjModel, alpha=1.0):
     """Tint the robot in MuJoCo to get a similar visualization of symmetric robots."""
     # Define colors

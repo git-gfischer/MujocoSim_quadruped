@@ -126,7 +126,8 @@ class QuadrupedEnv(gym.Env):
                 how state observations of legs observables (e.g., feet positions) are ordered in the state vector.
             sensors: (tuple) Tuple with the class names of the sensors to add to the environment.
             sensors_kwargs: (tuple) Tuple with the kwargs to pass to the sensors constructors.
-            external_disturbances_kwargs: (tuple) Tuple with the class names of the external disturbances to add to the environment.
+            external_disturbances_kwargs: (tuple) Tuple with the class names of the external disturbances to add to the
+              environment.
         """
         super(QuadrupedEnv, self).__init__()
         log.info(f'Initializing {robot} environment with scene {scene}.')
@@ -237,7 +238,7 @@ class QuadrupedEnv(gym.Env):
 
         # External disturbances if provided _______________________________________________________
         self.external_disturbances_kwargs = external_disturbances_kwargs
-        if(self.external_disturbances_kwargs is not None):
+        if self.external_disturbances_kwargs is not None:
             self._sample_external_disturbances()
 
         self.viewer = None
@@ -295,15 +296,13 @@ class QuadrupedEnv(gym.Env):
                 self._sample_ref_vel()
 
         # Handle for random external disturbances during the same episode
-        if self.external_disturbances_kwargs is not None and self.external_disturbances_kwargs["type"] == 'reset':
+        if self.external_disturbances_kwargs is not None and self.external_disturbances_kwargs['type'] == 'reset':
             self.step_num_after_reset_ext_disturb += 1
             if self.step_num_after_reset_ext_disturb >= self.step_num_before_reset_ext_disturb:
                 self._sample_external_disturbances()
-            
+
             # Apply external disturbances to the robot
             self.mjData.qfrc_applied[:6] = self._external_disturbances[:6]
-
-
 
         return obs, reward, is_terminated, is_truncated, info
 
@@ -400,7 +399,6 @@ class QuadrupedEnv(gym.Env):
         # Reset the desired base velocity command
         self._sample_ref_vel()
 
-
         # Ground friction coefficient randomization if enabled.
         tangential_friction = np.random.uniform(*self.ground_friction_coeff_range)
         self._set_ground_friction(tangential_coeff=tangential_friction)
@@ -429,8 +427,6 @@ class QuadrupedEnv(gym.Env):
                 change_robot_appearance(self.mjModel, alpha=1.0)
 
             mujoco.mjv_defaultFreeCamera(self.mjModel, self.viewer.cam)
-            self.viewer.user_scn.flags[mujoco.mjtRndFlag.mjRND_SHADOW] = 0
-            self.viewer.user_scn.flags[mujoco.mjtRndFlag.mjRND_REFLECTION] = 0
 
         # Define/Update markers for visualization of desired and current base velocity _______________________________
         X_B = self.base_configuration
@@ -447,7 +443,7 @@ class QuadrupedEnv(gym.Env):
         ref_vec_id, vec_id, ext_dist_vec_id = (
             self._geom_ids.get('ref_dr_B_vec', -1),
             self._geom_ids.get('dr_B_vec', -1),
-            self._geom_ids.get('external_disturbances', -1)
+            self._geom_ids.get('external_disturbances', -1),
         )
         self._geom_ids['ref_dr_B_vec'] = render_vector(
             self.viewer,
@@ -466,7 +462,7 @@ class QuadrupedEnv(gym.Env):
             geom_id=vec_id,
         )
 
-        if(self.external_disturbances_kwargs is not None):
+        if self.external_disturbances_kwargs is not None:
             self._geom_ids['external_disturbances'] = render_vector(
                 self.viewer,
                 self.mjData.qfrc_applied[:3],
@@ -904,7 +900,7 @@ class QuadrupedEnv(gym.Env):
             RR=self.mjData.qfrc_bias[self.legs_qvel_idx.RR],
         )
         return legs_qfrc_bias
-    
+
     @property
     def legs_qfrc_passive(self):
         """Gets the passive forces acting on the legs, e.g. friction."""
@@ -1044,7 +1040,7 @@ class QuadrupedEnv(gym.Env):
             robot_name=self.robot_name, obs_names=self.state_obs_names
         )
         return obs_reps
-    
+
     def _sample_ref_vel(self) -> tuple[np.ndarray, np.ndarray]:
         # Reset the desired base velocity command
         # ----------------------------------------------------------------------
@@ -1078,7 +1074,7 @@ class QuadrupedEnv(gym.Env):
         # ----------------------------------------------------------------------
         self.step_num_after_reset_ext_disturb = 0
         self.step_num_before_reset_ext_disturb = np.random.randint(1000, 3000)
-        
+
         self._external_disturbance_x = 0.0
         self._external_disturbance_y = 0.0
         self._external_disturbance_z = 0.0
@@ -1087,52 +1083,58 @@ class QuadrupedEnv(gym.Env):
         self._external_disturbance_yaw = 0.0
 
         # We check first if the external disturbances are set or not
-        if "x" in self.external_disturbances_kwargs:
-            x_range = self.external_disturbances_kwargs["x"]
+        if 'x' in self.external_disturbances_kwargs:
+            x_range = self.external_disturbances_kwargs['x']
             if len(x_range) == 1:
                 self._external_disturbance_x = x_range[0]
             elif len(x_range) == 2:
                 self._external_disturbance_x = np.random.uniform(x_range[0], x_range[1])
 
-        if "y" in self.external_disturbances_kwargs:
-            y_range = self.external_disturbances_kwargs["y"]
+        if 'y' in self.external_disturbances_kwargs:
+            y_range = self.external_disturbances_kwargs['y']
             if len(y_range) == 1:
                 self._external_disturbance_y = y_range[0]
             elif len(y_range) == 2:
                 self._external_disturbance_y = np.random.uniform(y_range[0], y_range[1])
 
-        if "z" in self.external_disturbances_kwargs:
-            z_range = self.external_disturbances_kwargs["z"]
+        if 'z' in self.external_disturbances_kwargs:
+            z_range = self.external_disturbances_kwargs['z']
             if len(z_range) == 1:
                 self._external_disturbance_z = z_range[0]
             elif len(z_range) == 2:
                 self._external_disturbance_z = np.random.uniform(z_range[0], z_range[1])
-        
-        if "roll" in self.external_disturbances_kwargs:
-            roll_range = self.external_disturbances_kwargs["roll"]
+
+        if 'roll' in self.external_disturbances_kwargs:
+            roll_range = self.external_disturbances_kwargs['roll']
             if len(roll_range) == 1:
                 self._external_disturbance_roll = roll_range[0]
             elif len(roll_range) == 2:
                 self._external_disturbance_roll = np.random.uniform(roll_range[0], roll_range[1])
 
-        if "pitch" in self.external_disturbances_kwargs:
-            pitch_range = self.external_disturbances_kwargs["pitch"]
+        if 'pitch' in self.external_disturbances_kwargs:
+            pitch_range = self.external_disturbances_kwargs['pitch']
             if len(pitch_range) == 1:
                 self._external_disturbance_pitch = pitch_range[0]
             elif len(pitch_range) == 2:
                 self._external_disturbance_pitch = np.random.uniform(pitch_range[0], pitch_range[1])
 
-        if "yaw" in self.external_disturbances_kwargs:
-            yaw_range = self.external_disturbances_kwargs["yaw"]
+        if 'yaw' in self.external_disturbances_kwargs:
+            yaw_range = self.external_disturbances_kwargs['yaw']
             if len(yaw_range) == 1:
                 self._external_disturbance_yaw = yaw_range[0]
             elif len(yaw_range) == 2:
                 self._external_disturbance_yaw = np.random.uniform(yaw_range[0], yaw_range[1])
 
-
-        self._external_disturbances = np.array([self._external_disturbance_x, self._external_disturbance_y, self._external_disturbance_z,
-                                                self._external_disturbance_roll, self._external_disturbance_pitch, self._external_disturbance_yaw])
-
+        self._external_disturbances = np.array(
+            [
+                self._external_disturbance_x,
+                self._external_disturbance_y,
+                self._external_disturbance_z,
+                self._external_disturbance_roll,
+                self._external_disturbance_pitch,
+                self._external_disturbance_yaw,
+            ]
+        )
 
     def _compute_reward(self):
         # Example reward function (to be defined based on the task)
@@ -1245,8 +1247,13 @@ class QuadrupedEnv(gym.Env):
 
     def _check_out_of_terrain_bounds(self) -> bool:
         """Env termination occurs when the robot is outside the environment."""
-        return self.base_pos[0] > self.terrain_limits[0] or self.base_pos[0] < self.terrain_limits[1] or self.base_pos[1] > self.terrain_limits[2] or self.base_pos[1] < self.terrain_limits[3]
-    
+        return (
+            self.base_pos[0] > self.terrain_limits[0]
+            or self.base_pos[0] < self.terrain_limits[1]
+            or self.base_pos[1] > self.terrain_limits[2]
+            or self.base_pos[1] < self.terrain_limits[3]
+        )
+
     def _get_geom_body_info(self, geom_name: str = None, geom_id: int = None) -> [int, str]:
         """Returns the body ID and name associated with the geometry name or ID."""
         assert geom_name is not None or geom_id is not None, 'Please provide either the geometry name or ID.'

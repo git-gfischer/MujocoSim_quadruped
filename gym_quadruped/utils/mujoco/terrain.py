@@ -103,16 +103,16 @@ def add_perlin_heightfield(
 
     # center of the area
     center = (position[0], position[1])
-    max_abs_x = size[0]/2.
-    max_abs_y = size[1]/2.
-    max_x = size[0]/2.
-    max_y = size[1]/2.
+    max_abs_x = size[0] / 2.0
+    max_abs_y = size[1] / 2.0
+    max_x = size[0] / 2.0
+    max_y = size[1] / 2.0
 
     # create a radius to spawn the robot at a safe distance
     if max_abs_x >= max_abs_y:
-        radius = 0.8*np.sqrt((max_x - center[0]) * (max_x - center[0]))
+        radius = 0.8 * np.sqrt((max_x - center[0]) * (max_x - center[0]))
     else:
-        radius = 0.8*np.sqrt((max_y - center[1]) * (max_y - center[1]))
+        radius = 0.8 * np.sqrt((max_y - center[1]) * (max_y - center[1]))
 
     terrain_limit = (center[0] + radius, center[0] - radius, center[1] + radius, center[1] - radius)
 
@@ -233,8 +233,7 @@ def add_world_of_boxes(
         radius = 1.2 * np.sqrt(2 * (max_x - center[0]) * (max_x - center[0]))
     else:
         radius = 1.2 * np.sqrt(2 * (max_y - center[1]) * (max_y - center[1]))
-    
-    
+
     terrain_limit = (center[0] + radius, center[0] - radius, center[1] + radius, center[1] - radius)
     return scene, terrain_limit
 
@@ -269,7 +268,7 @@ def add_world_of_pyramid(
         new_width = width - stride_rand[0] * i
         new_length = length - stride_rand[0] * i
 
-        if(new_width < 0.3 or new_length < 0.3):
+        if new_width < 0.3 or new_length < 0.3:
             break
 
         add_box(
@@ -291,7 +290,7 @@ def add_world_of_pyramid(
         radius = 1.5 * np.sqrt(2 * (max_abs_x - center[0]) * (max_abs_x - center[0]))
     else:
         radius = 1.5 * np.sqrt(2 * (max_abs_y - center[1]) * (max_abs_y - center[1]))
-    
+
     terrain_limit = (center[0] + radius, center[0] - radius, center[1] + radius, center[1] - radius)
     return scene, terrain_limit
 
@@ -330,7 +329,7 @@ def generate_terrain(
                     box_euler_rand=[0.1, 0.1, 2 * np.pi],
                     nums=[10, 10],
                     separation=[2 * hip_height, 2 * hip_height],
-                    box_size=[2 * hip_height, 2 * hip_height, hip_height / 2.],
+                    box_size=[2 * hip_height, 2 * hip_height, hip_height / 2.0],
                     box_size_rand=[0.5 * hip_height, 0.5 * hip_height, hip_height / 2],
                     random_roll_pitch=True,
                 )
@@ -360,6 +359,7 @@ def generate_terrain(
                 terrain_limits = (10000, -10000, 10000, -10000)
             else:
                 raise ValueError(
-                    f'Invalid scene name: {terrain_name}, available are: flat, random_boxes, random_pyramids, perlin, stairs, ramp, slippery'
+                    f'Invalid scene name: {terrain_name}, available are: flat, random_boxes, random_pyramids, '
+                    f'perlin, stairs, ramp, slippery'
                 )
     return scene_env, terrain_limits

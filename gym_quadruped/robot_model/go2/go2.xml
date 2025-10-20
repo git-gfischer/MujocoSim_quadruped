@@ -214,6 +214,13 @@
         <motor class="knee" name="RR_calf" joint="RR_calf_joint"/>
     </actuator>
 
+    <sensor>
+        <accelerometer name="imu_acc" site="imu"/>
+        <gyro name="imu_gyro" site="imu"/>
+        <framepos name="imu_pos" objtype="site" objname="imu"/>
+        <framequat name="imu_quat" objtype="site" objname="imu"/>
+    </sensor>
+
     <keyframe>
         <key name="home" qpos="0 0 0.27 1 0 0 0 0 0.9 -1.8 0 0.9 -1.8 0 0.9 -1.8 0 0.9 -1.8"/>
         <key name="down" qpos="0 0 0.05 1 0 0 0 0.0 1.21 -2.794 0.0 1.21 -2.794 0.0 1.21 -2.794 0.0 1.21 -2.794"/>
