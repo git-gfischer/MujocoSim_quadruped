@@ -423,6 +423,8 @@ class QuadrupedEnv(gym.Env):
                 show_right_ui=False,
                 key_callback=lambda x: self._key_callback(x),
             )
+            self.viewer.user_scn.flags[mujoco.mjtRndFlag.mjRND_SHADOW] = False
+            self.viewer.user_scn.flags[mujoco.mjtRndFlag.mjRND_REFLECTION] = False
             if tint_robot:
                 change_robot_appearance(self.mjModel, alpha=1.0)
 

@@ -144,7 +144,7 @@ def reproduce_dataset(dataset, fix_base: bool = False):
 if __name__ == '__main__':
     # Download the dataset if not present
     datasets_path = pathlib.Path(__file__).parent.parent / 'data'
-    test_file = 'data/aliengo/perlin/lin_vel=(0.0, 0.0) ang_vel=(-0.7, 0.7) friction=(1.0, 1.0)/ep=50_steps=2499.h5'
+    test_file = 'data/aliengo/perlin/lin_vel=(-1.5, 1.5) ang_vel=(-0.5, 0.5) friction=(0.7, 1.0)_action_noise_std=1.0/ep=300_steps=1249.h5'
     # if not data_path.exists():
     datasets_path.mkdir(parents=True, exist_ok=True)
     data_path = hf_hub_download(
