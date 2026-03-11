@@ -18,12 +18,12 @@ from gymnasium import spaces
 from mujoco import MjData, MjModel
 from scipy.spatial.transform import Rotation
 
-from gym_quadruped.robot_cfgs import RobotConfig, get_robot_config
-from gym_quadruped.sensors.base_sensor import Sensor
-from gym_quadruped.utils.math_utils import _process_range, angle_between_vectors, homogenous_transform
-from gym_quadruped.utils.mujoco.terrain import generate_terrain
-from gym_quadruped.utils.mujoco.visual import change_robot_appearance, render_ghost_robot, render_vector
-from gym_quadruped.utils.quadruped_utils import (
+from MujocoSim_quadruped.robot_cfgs import RobotConfig, get_robot_config
+from MujocoSim_quadruped.sensors.base_sensor import Sensor
+from MujocoSim_quadruped.utils.math_utils import _process_range, angle_between_vectors, homogenous_transform
+from MujocoSim_quadruped.utils.mujoco.terrain import generate_terrain
+from MujocoSim_quadruped.utils.mujoco.visual import change_robot_appearance, render_ghost_robot, render_vector
+from MujocoSim_quadruped.utils.quadruped_utils import (
     LegsAttr,
     configure_observation_space,
     configure_observation_space_representations,

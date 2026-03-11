@@ -310,7 +310,7 @@ def configure_observation_space(mj_model: mujoco.MjModel, obs_names: Sequence[st
             obs_lim_max = [np.inf]
             obs_lim_min = [-np.inf]
         else:
-            from gym_quadruped.quadruped_env import QuadrupedEnv
+            from MujocoSim_quadruped.quadruped_env import QuadrupedEnv
 
             raise ValueError(f'Invalid observation name: {obs_name}, available obs: {QuadrupedEnv.ALL_OBS}')
 
@@ -420,7 +420,7 @@ def configure_observation_space_representations(
         elif obs_name in ['work', 'kinetic_energy', 'reward']:
             obs_reps[obs_name] = G.trivial_representation
         else:
-            from gym_quadruped.quadruped_env import QuadrupedEnv
+            from MujocoSim_quadruped.quadruped_env import QuadrupedEnv
 
             raise ValueError(f'Invalid observation name: {obs_name}, available obs: {QuadrupedEnv.ALL_OBS}')
 
